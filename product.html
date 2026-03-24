@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Safe Markets - Sell Product</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    display:flex;
+}
+
+/* Sidebar */
+.sidebar{
+    width:220px;
+    background:#0f2027;
+    color:white;
+    height:100vh;
+    padding:20px;
+}
+
+.sidebar h2{
+    text-align:center;
+}
+
+.sidebar a{
+    display:block;
+    color:white;
+    padding:10px;
+    text-decoration:none;
+    margin:5px 0;
+    border-radius:6px;
+}
+
+.sidebar a:hover{
+    background:#1c3b4a;
+}
+
+/* Main */
+.main{
+    flex:1;
+    background:#f4f6f9;
+    padding:20px;
+}
+
+.header{
+    font-size:22px;
+    font-weight:bold;
+    margin-bottom:20px;
+}
+
+form{
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    max-width:500px;
+}
+
+input, textarea, select{
+    width:100%;
+    padding:10px;
+    margin:8px 0;
+    border-radius:6px;
+    border:1px solid #ccc;
+}
+
+button{
+    padding:12px;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+    font-weight:bold;
+    background:#00bcd4;
+    color:white;
+    margin-top:10px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="sidebar">
+    <h2>Safe Markets</h2>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="marketplace.html">Marketplace</a>
+    <a href="sell.html">Sell Product</a>
+    <a href="chat.html">Messages</a>
+    <a href="reviews.html">Reviews</a>
+    <a href="report.html">Report Issue</a>
+</div>
+
+<div class="main">
+    <div class="header">Sell a Product</div>
+
+    <form id="sellForm">
+        <label>Product Name</label>
+        <input type="text" id="productName" placeholder="Enter product name" required>
+
+        <label>Category</label>
+        <select id="category" required>
+            <option value="">Select category</option>
+            <option value="electronics">Electronics</option>
+            <option value="fashion">Fashion</option>
+            <option value="home">Home & Living</option>
+            <option value="sports">Sports</option>
+            <option value="others">Others</option>
+        </select>
+
+        <label>Price ($)</label>
+        <input type="number" id="price" placeholder="Enter price" required>
+
+        <label>Description</label>
+        <textarea id="description" placeholder="Enter description" rows="4" required></textarea>
+
+        <label>Image URL</label>
+        <input type="text" id="image" placeholder="Enter image URL or leave empty" >
+
+        <button type="submit">Add Product</button>
+    </form>
+
+</div>
+
+<script>
+    if(user.status !== "approved"){
+    alert("You must be an approved seller to list products!");
+    window.location.href = "dashboard.html";
+}
+/* Load user */
+let user = JSON.parse(localStorage.getItem("activeUser"));
+let activeRole = localStorage.getItem("activeRole") || user.roles[0];
+
+if(!user){
+    window.location.href = "auth.html";
+}
+
+if(activeRole !== "seller"){
+    alert("Switch to SELLER role first!");
+    window.location.href = "dashboard.html";
+}
+
+/* Handle form */
+document.getElementById("sellForm").addEventListener("submit", function(e){
+    e.preventDefault();
+
+    let productName = document.getElementById("productName").value;
+    let category = document.getElementById("category").value;
+    let price = document.getElementById("price").value;
+    let description = document.getElementById("description").value;
+    let image = document.getElementById("image").value || "";
+
+    let products = JSON.parse(localStorage.getItem("products")) || [];
+
+    let newProduct = {
+        id: Date.now(),
+        seller: user.email,
+        name: productName,
+        category,
+        price,
+        description,
+        image,
+        trustScore: user.trustScore,
+        approved: true  // Later you can add approval workflow
+    };
+
+    products.push(newProduct);
+    localStorage.setItem("products", JSON.stringify(products));
+
+    alert("Product added successfully!");
+
+    // Reset form
+    document.getElementById("sellForm").reset();
+});
+</script>
+
+</body>
+</html>
