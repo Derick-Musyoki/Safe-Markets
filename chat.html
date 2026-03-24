@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Safe Markets Chat</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    display:flex;
+    height:100vh;
+}
+
+/* Sidebar (Chats List) */
+.sidebar{
+    width:30%;
+    background:#0f2027;
+    color:white;
+    padding:15px;
+    overflow-y:auto;
+}
+
+.chat-user{
+    padding:12px;
+    background:#1c3b4a;
+    margin:8px 0;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.chat-user:hover{
+    background:#2c5364;
+}
+
+/* Chat Area */
+.chat-area{
+    width:70%;
+    display:flex;
+    flex-direction:column;
+    background:#f4f6f9;
+}
+
+.chat-header{
+    padding:15px;
+    background:#00bcd4;
+    color:white;
+    font-weight:bold;
+}
+
+.messages{
+    flex:1;
+    padding:15px;
+    overflow-y:auto;
+}
+
+.message{
+    max-width:60%;
+    padding:10px;
+    margin:8px 0;
+    border-radius:10px;
+}
+
+.sent{
+    background:#00c6ff;
+    margin-left:auto;
+}
+
+.received{
+    background:#ddd;
+}
+
+/* Input */
+.input-box{
+    display:flex;
+    padding:10px;
+    background:white;
+}
+
+.input-box input{
+    flex:1;
+    padding:10px;
+    border-radius:6px;
+    border:1px solid #ccc;
+}
+
+.input-box button{
+    margin-left:10px;
+    padding:10px 15px;
+    border:none;
+    border-radius:6px;
+    background:#00bcd4;
+    color:white;
+    cursor:pointer;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- Chat List -->
+<div class="sidebar">
+    <h3>Chats</h3>
+    <div id="chatList"></div>
+</div>
+
+<!-- Chat Area -->
+<div class="chat-area">
+
+    <div class="chat-header" id="chatHeader">
+        Select a chat
+    </div>
+
+    <div class="messages" id="messages"></div>
+
+    <div class="input-box">
+        <input type="text" id="messageInput" placeholder="Type a message...">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+</div>
+
+<script>
+
+/* Load user */
+let user = JSON.parse(localStorage.getItem("activeUser"));
+if(!user){
+    window.location.href = "auth.html";
+}
+
+/* Get seller from marketplace */
+let currentChatUser = localStorage.getItem("chatWith") || null;
+
+/* Load chats */
+let chats = JSON.parse(localStorage.getItem("chats")) || {};
+
+/* Auto open chat if exists */
+if(currentChatUser){
+    openChat(currentChatUser);
+}
+
+/* Open Chat */
+function openChat(otherUser){
+    currentChatUser = otherUser;
+    document.getElementById("chatHeader").innerText = otherUser;
+
+    let chatKey = getChatKey(user.email, otherUser);
+    let messages = chats[chatKey] || [];
+
+    const msgBox = document.getElementById("messages");
+    msgBox.innerHTML = "";
+
+    messages.forEach(msg => {
+        let div = document.createElement("div");
+        div.className = "message " + (msg.sender === user.email ? "sent" : "received");
+        div.innerText = msg.text;
+        msgBox.appendChild(div);
+    });
+}
+
+/* Send Message */
+function sendMessage(){
+    let text = document.getElementById("messageInput").value;
+    if(!text || !currentChatUser) return;
+
+    let chatKey = getChatKey(user.email, currentChatUser);
+
+    if(!chats[chatKey]) chats[chatKey] = [];
+
+    chats[chatKey].push({
+        sender: user.email,
+        text: text
+    });
+
+    localStorage.setItem("chats", JSON.stringify(chats));
+
+    document.getElementById("messageInput").value = "";
+
+    openChat(currentChatUser);
+}
+
+/* Chat Key */
+function getChatKey(a,b){
+    return [a,b].sort().join("_");
+}
+
+</script>
+</body>
+</html>
