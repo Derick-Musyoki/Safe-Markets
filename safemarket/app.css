@@ -1,0 +1,36 @@
+body {
+  font-family: Arial, sans-serif;
+  background-image:url('https://i.imgur.com/gbSEMzE.jpeg');
+ background-size: cover;
+ background-position:center;
+ background-repeat:no-repeat;
+background-size: 110%;
+}
+
+html, body {
+  height: 100%;
+}
+
+
+
+.login {
+  background: white;
+  width: 420px;
+  padding: 20px;
+  margin: 100px auto;
+  border-radius: 8px;
+  text-align: center;
+}
+input, select, button {
+  width: 80%;
+  padding: 10px;
+  margin: 8px 0;
+}
+
+.register {
+  background: white;
+  width: 420px;
+  padding: 20px;
+  margin: 100px auto;
+  border-radius: 8px;
+  text-align: center;
