@@ -64,6 +64,9 @@ The system focuses on **fraud prevention, transparency, and accountability**.
 
 ## 🧮 Trust Engine
 
+## Authors
+- Nexus collective
+
 
 
 Trust Score is calculated using:
