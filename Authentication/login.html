@@ -2,21 +2,56 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"> 
-  <title>Safe Markets</title>
+  <title>Safe Markets - Login</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="app.css">
-  </head>
+</head>
 <body>
 
+<div class="container">
+  <div class="form-container">
+    
+    <div class="toggle-buttons">
+      <button class="toggle-btn active" id="loginToggle">Login</button>
+      <button class="toggle-btn" id="registerToggle">Register</button>
+    </div>
 
-<div  class="login">
-  <h2>SafeMarkets Login</h2>
-  <input type="text"id="username" placeholder="Username">
-  <input type="password" id="password" placeholder="Password">
-  <button id="loginBtn">Login</button>
-  <p>Don't have an account?</p> <br>
-  <a href="register.html">Create account</a>
+    
+    <div id="loginForm" class="form active-form">
+      <h2>SafeMarkets Login</h2>
+      <input type="email" id="loginEmail" placeholder="Email" required>
+      <input type="password" id="loginPassword" placeholder="Password" required>
+      <button id="loginBtn">Login</button>
+      <p class="switch-text">New here? <span id="switchToRegister">Create account</span></p>
+    </div>
+
+    <div id="registerForm" class="form">
+      <h2>Create Account</h2>
+      <input type="email" id="regEmail" placeholder="Email" required>
+      <input type="password" id="regPassword" placeholder="Password" required>
+      <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+      
+      <div class="role-select">
+        <p>sign up as:</p>
+        <label class="role-option">
+          <input type="radio" name="role" value="buyer" checked> Buyer
+        </label>
+        <label class="role-option">
+          <input type="radio" name="role" value="seller"> Seller
+        </label>
+      </div>
+      
+      <label class="terms">
+        <input type="checkbox" id="termsCheck"> I agree to the Terms & Conditions
+      </label>
+      
+      <button id="registerBtn">Register</button>
+      <p class="switch-text">Already have an account? <span id="switchToLogin">Login here</span></p>
+    </div>
+
+  </div>
 </div>
-<script src="script.js"></script> 
+
+<script src="script.js"></script>
 </body>
 </html>
