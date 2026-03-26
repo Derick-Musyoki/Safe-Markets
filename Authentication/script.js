@@ -24,6 +24,8 @@ document.head.appendChild(style);
 
 document.addEventListener("DOMContentLoaded", function() {
     
+    users = JSON.parse(localStorage.getItem("users")) || [];
+    
     const activeUser = localStorage.getItem("activeUser");
     if (activeUser && (window.location.pathname.includes("login.html") || window.location.pathname.includes("register.html"))) {
         const user = JSON.parse(activeUser);
@@ -35,6 +37,8 @@ document.addEventListener("DOMContentLoaded", function() {
         document.getElementById("loginBtn").onclick = function() {
             const email = document.getElementById("loginEmail").value;
             const pass = document.getElementById("loginPassword").value;
+            
+            users = JSON.parse(localStorage.getItem("users")) || [];
             
             const user = users.find(u => u.email === email && u.password === pass);
             
@@ -79,6 +83,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 alert("Passwords don't match!");
                 return;
             }
+            
+            users = JSON.parse(localStorage.getItem("users")) || [];
             
             if (users.find(u => u.email === email)) {
                 alert("Email already registered!");
