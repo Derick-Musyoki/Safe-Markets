@@ -1,36 +1,133 @@
 body {
   font-family: Arial, sans-serif;
-  background-image:url('https://i.imgur.com/gbSEMzE.jpeg');
- background-size: cover;
- background-position:center;
- background-repeat:no-repeat;
-background-size: 110%;
+  background-image: url('https://i.imgur.com/gbSEMzE.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 110%;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-html, body {
-  height: 100%;
+
+.login-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 180px;
 }
 
-
-
-.login {
+.login-card {
   background: white;
   width: 420px;
   padding: 20px;
-  margin: 100px auto;
   border-radius: 8px;
   text-align: center;
 }
-input, select, button {
+
+.register-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 100px;
+}
+
+.register-card {
+  background: white;
+  width: 420px;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+
+input, button {
   width: 80%;
   padding: 10px;
   margin: 8px 0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
 }
 
-.register {
-  background: white;
-  width: 420px;
-  padding: 20px;
-  margin: 100px auto;
-  border-radius: 8px;
-  text-align: center;
+button {
+  background: #2c5364;
+  color: white;
+  cursor: pointer;
+  border: none;
+}
+
+button:hover {
+  background: #1a3a44;
+}
+
+
+.role-select {
+  text-align: left;
+  width: 80%;
+  margin: 10px auto;
+}
+
+.role-select p {
+  margin: 0 0 5px 0;
+}
+
+.role-option {
+  display: inline-block;
+  margin-right: 15px;
+}
+
+.role-option input {
+  width: auto;
+  margin-right: 5px;
+}
+
+.terms {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  margin: 10px 0;
+  font-size: 14px;
+}
+
+.terms input {
+  width: auto;
+  margin: 0;
+}
+
+
+.switch-text {
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.switch-text a {
+  color: #2c5364;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.switch-text a:hover {
+  text-decoration: underline;
+}
+
+.swipe-in {
+  animation: slideIn 0.4s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
