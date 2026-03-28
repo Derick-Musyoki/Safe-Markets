@@ -1,25 +1,15 @@
 body {
   font-family: Arial, sans-serif;
-  background-image: url('https://i.imgur.com/gbSEMzE.jpeg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 110%;
-  margin: 0;
-  padding: 0;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+  background-color: #0f172a;
 
+}
 
 .login-container {
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 180px;
+  margin-top: 300px;
 }
 
 .login-card {
