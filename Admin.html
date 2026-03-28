@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Safe Markets Admin</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    display:flex;
+}
+
+/* Sidebar */
+.sidebar{
+    width:230px;
+    background:black;
+    color:white;
+    height:100vh;
+    padding:20px;
+}
+
+.sidebar h2{
+    text-align:center;
+}
+
+.sidebar a{
+    display:block;
+    color:white;
+    padding:10px;
+    text-decoration:none;
+    margin:5px 0;
+    border-radius:6px;
+}
+
+.sidebar a:hover{
+    background:#1c3b4a;
+}
+
+/* Main */
+.main{
+    flex:1;
+    background:#f4f6f9;
+    padding:20px;
+}
+
+h2{
+    margin-bottom:10px;
+}
+
+/* Cards */
+.card{
+    background:white;
+    padding:15px;
+    margin-bottom:20px;
+    border-radius:10px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* Tables */
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th, td{
+    padding:10px;
+    border-bottom:1px solid #ddd;
+}
+
+th{
+    background:#00bcd4;
+    color:white;
+}
+
+/* Buttons */
+button{
+    padding:5px 10px;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+.approve{ background:#4caf50; color:white; }
+.reject{ background:#f44336; color:white; }
+.resolve{ background:#2196f3; color:white; }
+
+</style>
+</head>
+
+<body>
+
+<div class="sidebar">
+    <h2>Admin Panel</h2>
+    <a href="#">Dashboard</a>
+    <a href="#">Businesses: <span id="businessCount">0</span></a>
+</div>
+
+<div class="main">
+
+    <div class="card">
+    <h2>Seller Approvals</h2>
+    <table>
+    <thead>
+    <tr>
+    <th>Email</th>
+    <th>Business</th>
+    <th>Category</th>
+    <th>Status</th>
+    <th>Action</th>
+    </tr>
+    </thead>
+    <tbody id="sellerTable"></tbody>
+    </table>
+</div>
+
+    <!-- USERS -->
+    <div class="card">
+        <h2>Users</h2>
+        <table>
+        <thead>
+        <tr>
+        <th>Email</th>
+        <th>Roles</th>
+        <th>Trust Score</th>
+        </tr>
+        </thead>
+        <tbody id="usersTable"></tbody>
+        </table>
+    </div>
+
+    <!-- PRODUCTS -->
+    <div class="card">
+        <h2>Products</h2>
+        <table>
+        <thead>
+        <tr>
+        <th>Name</th>
+        <th>Seller</th>
+        <th>Price</th>
+        <th>Status</th>
+        <th>Action</th>
+        </tr>
+        </thead>
+        <tbody id="productsTable"></tbody>
+        </table>
+    </div>
+
+    <!-- REPORTS -->
+    <div class="card">
+        <h2>Reports / Disputes</h2>
+        <table>
+        <thead>
+        <tr>
+        <th>Product</th>
+        <th>Reporter</th>
+        <th>Issue</th>
+        <th>Status</th>
+        <th>Action</th>
+        </tr>
+        </thead>
+        <tbody id="reportsTable"></tbody>
+        </table>
+    </div>
+
+</div>
+
+<script>
+
+/* Load data */
+let users = JSON.parse(localStorage.getItem("users")) || [];
+let products = JSON.parse(localStorage.getItem("products")) || [];
+let reports = JSON.parse(localStorage.getItem("reports")) || [];
+
+/* USERS TABLE */
+function renderUsers(){
+    const table = document.getElementById("usersTable");
+    table.innerHTML = "";
+
+    users.forEach(u => {
+        let row = `
+            <tr>
+                <td>${u.email}</td>
+                <td>${u.roles.join(", ")}</td>
+                <td>${u.trustScore}%</td>
+            </tr>
+        `;
+        table.innerHTML += row;
+    });
+}
+
+/* PRODUCTS TABLE */
+function renderProducts(){
+    const table = document.getElementById("productsTable");
+    table.innerHTML = "";
+
+    products.forEach((p, index) => {
+        let row = `
+            <tr>
+                <td>${p.name}</td>
+                <td>${p.seller}</td>
+                <td>$${p.price}</td>
+                <td>${p.approved ? "Approved" : "Pending"}</td>
+                <td>
+                    <button class="approve" onclick="approveProduct(${index})">Approve</button>
+                    <button class="reject" onclick="deleteProduct(${index})">Delete</button>
+                </td>
+            </tr>
+        `;
+        table.innerHTML += row;
+    });
+}
+
+/* REPORTS TABLE */
+function renderReports(){
+    const table = document.getElementById("reportsTable");
+    table.innerHTML = "";
+
+    reports.forEach((r, index) => {
+        let product = products.find(p => p.id == r.productId);
+
+        let row = `
+            <tr>
+                <td>${product ? product.name : "Deleted"}</td>
+                <td>${r.reporter}</td>
+                <td>${r.issueType}</td>
+                <td>${r.status}</td>
+                <td>
+                    <button class="resolve" onclick="resolveReport(${index})">Resolve</button>
+                </td>
+            </tr>
+        `;
+        table.innerHTML += row;
+    });
+}
+
+/* ACTIONS */
+
+// Approve product
+function approveProduct(index){
+    if(confirm("Approve this product?")){
+    products[index].approved = true;
+    localStorage.setItem("products", JSON.stringify(products));
+    renderProducts();
+    }
+}
+
+// Delete product
+function deleteProduct(index){
+    if(confirm("Delete this product?")){
+        products.splice(index,1);
+        localStorage.setItem("products", JSON.stringify(products));
+        renderProducts();
+    }
+}
+
+// Resolve report
+function resolveReport(index){
+    reports[index].status = "resolved";
+    localStorage.setItem("reports", JSON.stringify(reports));
+    renderReports();
+}
+
+/* INITIAL RENDER */
+renderUsers();
+renderProducts();
+renderReports();
+
+function renderSellers(){
+    const table = document.getElementById("sellerTable");
+    table.innerHTML = "";
+
+    users.forEach((u,index)=>{
+        if(u.roles.includes("seller")){
+            table.innerHTML += `
+            <tr>
+                <td>${u.email}</td>
+                <td>${u.businessName || "-"}</td>
+                <td>${u.category || "-"}</td>
+                <td>${u.status || "none"}</td>
+                <td>
+                    <button class="approve" onclick="approveSeller(${index})">Approve</button>
+                    <button class="reject" onclick="blockSeller(${index})">Block</button>
+                </td>
+            </tr>
+            `;
+        }
+    });
+}
+
+function approveSeller(i){
+    users[i].status = "approved";
+    localStorage.setItem("users", JSON.stringify(users));
+    renderSellers();
+}
+
+function blockSeller(i){
+    users[i].status = "blocked";
+    localStorage.setItem("users", JSON.stringify(users));
+    renderSellers();
+}
+
+users.forEach(u=>{
+    if(u.trustScore < 40){
+        u.status = "blocked";
+    }
+});
+localStorage.setItem("users", JSON.stringify(users));
+
+renderSellers();
+
+function updateBusinessCount(){
+    let count = users.filter(u => u.roles.includes("seller")).length;
+    document.getElementById("businessCount").innerText = count;
+}
+updateBusinessCount();
+
+</script>
+
+</body>
+</html>
