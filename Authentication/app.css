@@ -1,7 +1,30 @@
 body {
   font-family: Arial, sans-serif;
   background-color: #0f172a;
+}
 
+.hero {
+  background: linear-gradient(135deg, #0a0a0f 0%, #0d0d1f 50%, #100a1a 100%);
+  padding: 60px 24px;
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: clamp(32px, 8vw, 64px);
+  font-weight: 800;
+  color: #e0e0f0;        
+  margin-bottom: 12px;
+}
+
+.hero h1 span {
+  color: #00ff9d;        
+}
+
+.slogan {
+  font-size: 16px;
+  color: #6a6a8a;        
+  letter-spacing: 2px;
+  text-transform: uppercase;
 }
 
 .login-container {
@@ -9,7 +32,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 300px;
+  margin-top: 80px;
 }
 
 .login-card {
