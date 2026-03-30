@@ -4,7 +4,6 @@ body {
 }
 
 .hero {
-  background: linear-gradient(135deg, #0a0a0f 0%, #0d0d1f 50%, #100a1a 100%);
   padding: 60px 24px;
   text-align: center;
 }
